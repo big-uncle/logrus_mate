@@ -12,8 +12,8 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/gogap/config"
-	"github.com/gogap/logrus_mate"
-	"github.com/gogap/logrus_mate/hooks/utils/caller"
+	"github.com/big-uncle/logrus_mate"
+	"github.com/big-uncle/logrus_mate/hooks/utils/caller"
 )
 
 type fileHookConfig struct {
@@ -50,8 +50,8 @@ func NewFileHook(config config.Configuration) (hook logrus.Hook, err error) {
 		Rotate:     config.GetBoolean("rotate", true),
 		MaxLines:   config.GetInt64("max-lines", 10000),
 		MaxSize:    config.GetInt64("max-size", 1024),
-		RotatePerm: config.GetString("rotate-perm", "0440"),
-		Perm:       config.GetString("perm", "0660"),
+		RotatePerm: config.GetString("rotate-perm", "0664"),
+		Perm:       config.GetString("perm", "0664"),
 		Level:      config.GetInt32("level"),
 	}
 
@@ -119,14 +119,11 @@ func (p *FileHook) Levels() []logrus.Level {
 }
 
 func getMessage(entry *logrus.Entry) (message string, err error) {
-	message = message + fmt.Sprintf("%s\n", entry.Message)
+	message = message + fmt.Sprintf("%s ", entry.Message)
 	for k, v := range entry.Data {
-		if !strings.HasPrefix(k, "err_") {
-			message = message + fmt.Sprintf("%v:%v\n", k, v)
-		}
+		message = message + fmt.Sprintf("%v:%v ", k, v)
 	}
 	if errCode, exist := entry.Data["err_code"]; exist {
-
 		ns, _ := entry.Data["err_ns"]
 		ctx, _ := entry.Data["err_ctx"]
 		id, _ := entry.Data["err_id"]
@@ -140,10 +137,10 @@ func getMessage(entry *logrus.Entry) (message string, err error) {
 		buf.WriteString(fmt.Sprintf("\tstacktrace:\n\t\t%s", st))
 
 		message = message + fmt.Sprintf("%v", buf.String())
-	} else {
-		file, lineNumber := caller.GetCallerIgnoringLogMulti(2)
+	} else if entry.Level < logrus.InfoLevel {
+		file, lineNumber := caller.GetCallerIgnoringLogMulti(3)
 		if file != "" {
-			sep := fmt.Sprintf("%s/src/", os.Getenv("GOPATH"))
+			sep := "/pkg/mod/"
 			fileName := strings.Split(file, sep)
 			if len(fileName) >= 2 {
 				file = fileName[1]

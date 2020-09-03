@@ -5,7 +5,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/zbindenren/logrus_mail"
 
-	"github.com/gogap/logrus_mate"
+	"github.com/big-uncle/logrus_mate"
 )
 
 type MailHookConfig struct {

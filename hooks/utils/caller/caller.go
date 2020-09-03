@@ -37,5 +37,5 @@ outer:
 
 func GetCallerIgnoringLogMulti(callDepth int) (string, int) {
 	// the +1 is to ignore this (GetCallerIgnoringLogMulti) frame
-	return GetCaller(callDepth+1, "logrus/hooks.go", "logrus/entry.go", "logrus/logger.go", "logrus/exported.go", "proc.go", "asm_amd64.s")
+	return GetCaller(callDepth+1, "/hooks.go", "/entry.go", "/logger.go", "/exported.go", "proc.go", "asm_amd64.s")
 }

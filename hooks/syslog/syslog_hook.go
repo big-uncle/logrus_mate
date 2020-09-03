@@ -6,8 +6,8 @@ import (
 	"github.com/sirupsen/logrus"
 	logrus_syslog "github.com/sirupsen/logrus/hooks/syslog"
 
+	"github.com/big-uncle/logrus_mate"
 	"github.com/gogap/config"
-	"github.com/gogap/logrus_mate"
 )
 
 type SyslogHookConfig struct {

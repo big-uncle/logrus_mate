@@ -4,11 +4,11 @@ import (
 	"fmt"
 
 	"github.com/gogap/errors"
-	"github.com/gogap/logrus_mate"
 	"github.com/sirupsen/logrus"
+	"github.com/big-uncle/logrus_mate"
 
-	_ "github.com/gogap/logrus_mate/hooks/expander"
-	_ "github.com/gogap/logrus_mate/hooks/file"
+	_ "github.com/big-uncle/logrus_mate/hooks/expander"
+	_ "github.com/big-uncle/logrus_mate/hooks/file"
 )
 
 func main() {

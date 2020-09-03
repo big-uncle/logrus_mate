@@ -79,9 +79,9 @@ func newFileWriter() *fileLogWriter {
 		Daily:      true,
 		MaxDays:    7,
 		Rotate:     true,
-		RotatePerm: "0440",
+		RotatePerm: "0664",
 		Level:      LevelDebug,
-		Perm:       "0660",
+		Perm:       "0664",
 	}
 	return w
 }
@@ -192,7 +192,7 @@ func (w *fileLogWriter) initFd() error {
 	w.dailyOpenDate = w.dailyOpenTime.Day()
 	w.maxLinesCurLines = 0
 	if w.Rotate {
-		if w.Daily  {
+		if w.Daily {
 			go w.dailyRotate(w.dailyOpenTime)
 		}
 		if fInfo.Size() > 0 && w.MaxLines > 0 {
@@ -345,37 +345,6 @@ func (w *fileLogWriter) Flush() {
 }
 
 func formatTimeHeader(when time.Time) ([]byte, int) {
-	y, mo, d := when.Date()
-	h, mi, s := when.Clock()
-	ns := when.Nanosecond() / 1000000
-	//len("2006/01/02 15:04:05.123 ")==24
-	var buf [24]byte
-
-	buf[0] = y1[y/1000%10]
-	buf[1] = y2[y/100]
-	buf[2] = y3[y-y/100*100]
-	buf[3] = y4[y-y/100*100]
-	buf[4] = '/'
-	buf[5] = mo1[mo-1]
-	buf[6] = mo2[mo-1]
-	buf[7] = '/'
-	buf[8] = d1[d-1]
-	buf[9] = d2[d-1]
-	buf[10] = ' '
-	buf[11] = h1[h]
-	buf[12] = h2[h]
-	buf[13] = ':'
-	buf[14] = mi1[mi]
-	buf[15] = mi2[mi]
-	buf[16] = ':'
-	buf[17] = s1[s]
-	buf[18] = s2[s]
-	buf[19] = '.'
-	buf[20] = ns1[ns/100]
-	buf[21] = ns1[ns%100/10]
-	buf[22] = ns1[ns%10]
-
-	buf[23] = ' '
-
-	return buf[0:], d
+	fmtTime := when.Format("[2006-01-02 15:04:05.999999]")
+	return []byte(fmtTime),when.Day()
 }

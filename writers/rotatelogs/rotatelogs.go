@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/gogap/config"
-	"github.com/gogap/logrus_mate"
 	"github.com/lestrrat-go/file-rotatelogs"
+	"github.com/big-uncle/logrus_mate"
 )
 
 type RedisIOConfig struct {
